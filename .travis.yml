@@ -12,6 +12,7 @@ branches:
 deploy:
   provider: heroku
   api_key: $HEROKU_API_KEY
+  app: safe-shore-31485
   on:
     branch: master
 
