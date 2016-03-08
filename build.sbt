@@ -15,5 +15,5 @@ libraryDependencies ++= Seq(
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-herokuAppName in Compile := "safe-shore-31485"
+herokuAppName in Compile := "peaceful-ridge-14628"
 
