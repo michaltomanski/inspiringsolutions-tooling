@@ -2,8 +2,14 @@ package controllers
 
 import akka.actor.ActorSystem
 import javax.inject._
+
+import actors.MyWebSocketActor
+import akka.stream.ActorMaterializer
 import play.api._
+import play.api.mvc.WebSocket._
 import play.api.mvc._
+import play.api.Play.current
+
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.concurrent.duration._
 
@@ -18,7 +24,13 @@ import scala.concurrent.duration._
  * asynchronous code.
  */
 @Singleton
-class AsyncController @Inject() (actorSystem: ActorSystem)(implicit exec: ExecutionContext) extends Controller {
+class AsyncController @Inject() ()(implicit exec: ExecutionContext, actorSystem: ActorSystem) extends Controller {
+
+  implicit val materializer = ActorMaterializer()
+
+  def socket = WebSocket.acceptWithActor[String, String] { request => out =>
+    MyWebSocketActor.props(out)
+  }
 
   /**
    * Create an Action that returns a plain text message after a delay
