@@ -10,7 +10,6 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0-RC1" % Test,
   "com.typesafe.akka" %% "akka-actor" % "2.4.2",
   "com.typesafe.akka" %% "akka-stream-experimental" % "1.0",
   "com.typesafe.akka" %% "akka-http-experimental" % "1.0",

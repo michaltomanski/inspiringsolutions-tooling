@@ -3,7 +3,7 @@ package controllers
 import akka.actor.ActorSystem
 import javax.inject._
 
-import actors.MyWebSocketActor
+import actors.{MyWebSocketActor, TwitterActor}
 import akka.stream.ActorMaterializer
 import play.api._
 import play.api.mvc.WebSocket._
@@ -40,8 +40,10 @@ class AsyncController @Inject() ()(implicit exec: ExecutionContext, actorSystem:
    * will be called when the application receives a `GET` request with
    * a path of `/message`.
    */
-  def message = Action.async {
-    getFutureMessage(1.second).map { msg => Ok(msg) }
+  def message = Action {
+    val twitterer = TwitterActor
+    println("ACTOR INITIALISED")
+    Ok
   }
 
   private def getFutureMessage(delayTime: FiniteDuration): Future[String] = {
