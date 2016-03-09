@@ -1,32 +1,30 @@
 package actors
 
-import java.util.concurrent.TimeUnit
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-import akka.http.scaladsl.{Http, HttpsContext}
+import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpHeader.ParsingResult
 import akka.http.scaladsl.model.{ContentType, MediaTypes, _}
 import akka.stream.ActorMaterializer
+import com.google.inject.ImplementedBy
 import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
 import org.json4s.DefaultFormats
-import akka.pattern.pipe
-import akka.util.Timeout
 import com.hunorkovacs.koauth.domain.KoauthRequest
 import models.Tweet
 import org.json4s.native.JsonMethods._
 import com.typesafe.config.ConfigFactory
 import core.Global
 import play.api.Play
-import play.api.libs.concurrent.Akka
-import play.api.Play.current
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-object TwitterActor {
-  lazy val actorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
+@ImplementedBy(classOf[TwitterServiceImpl])
+trait TwitterService
+
+class TwitterServiceImpl extends TwitterService {
+  implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
 
   val conf = ConfigFactory.load()
 
@@ -37,13 +35,10 @@ object TwitterActor {
   private val accessTokenSecret = "g1LdmijUXAXgPhjqZEoVoOePXwUhECZXTDi3b6xAY6qoM"
   private val url = "https://stream.twitter.com/1.1/statuses/filter.json"
 
-  implicit val system = ActorSystem()
   implicit val materializer = ActorMaterializer()
   implicit val formats = DefaultFormats
 
-  private val consumer = new DefaultConsumerService(system.dispatcher)
-  //lazy val actors = Akka.system.actorSelection(actorSystem / "*").resolveOne(Duration(1000, TimeUnit.MILLISECONDS))
-  //private val actor: ActorRef = Await.result(actors, Duration(1000, TimeUnit.MILLISECONDS))
+  private val consumer = new DefaultConsumerService(actorSystem.dispatcher)
 
   val body = "track=fuck"
   val source = Uri(url)
@@ -78,7 +73,7 @@ object TwitterActor {
         method = HttpMethods.POST,
         uri = source,
         headers = httpHeaders,
-        entity = HttpEntity(contentType = ContentType(MediaTypes.`application/x-www-form-urlencoded`), string = body)
+        entity = HttpEntity(contentType = ContentType(MediaTypes.`application/x-www-form-urlencoded`, HttpCharsets.`UTF-8`), string = body)
       )
       val request = Http().singleRequest(httpRequest)
       request.flatMap { response =>

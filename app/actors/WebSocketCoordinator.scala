@@ -22,11 +22,6 @@ class WebSocketCoordinator extends Actor {
     }
   }
 
-//  private def broadCast(hashTag: String)(closure: (ActorRef) => Unit) {
-//    actorMap.get(hashTag).foreach(closure)
-//  }
-
-
   private def handleNewSocketActor(hashTag: String, ref: ActorRef) {
     val newRefSeq = actorMap.getOrElse(hashTag, ref)
 

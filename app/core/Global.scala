@@ -1,8 +1,6 @@
 package core
 
-
-
-import actors.{TwitterActor, WebSocketCoordinator}
+import actors.{TwitterService, WebSocketCoordinator}
 import akka.actor.ActorSystem
 import play.api.{GlobalSettings, Play}
 
@@ -13,7 +11,8 @@ object Global extends GlobalSettings {
 
   override def onStart(app: play.api.Application): Unit = {
     println("startup")
-    val tw = TwitterActor
+
+    val tw = Play.unsafeApplication.injector.instanceOf[TwitterService]
   }
 
 }
