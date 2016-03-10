@@ -2,10 +2,12 @@ package controllers
 
 import akka.actor.ActorSystem
 import javax.inject._
-import play.api._
+
+import actors.MyWebSocketActor
 import play.api.mvc._
-import scala.concurrent.{ExecutionContext, Future, Promise}
-import scala.concurrent.duration._
+import play.api.Play.current
+
+import scala.concurrent.ExecutionContext
 
 /**
  * This controller creates an `Action` that demonstrates how to write
@@ -18,24 +20,10 @@ import scala.concurrent.duration._
  * asynchronous code.
  */
 @Singleton
-class AsyncController @Inject() (actorSystem: ActorSystem)(implicit exec: ExecutionContext) extends Controller {
+class AsyncController @Inject() ()(implicit exec: ExecutionContext, actorSystem: ActorSystem) extends Controller {
 
-  /**
-   * Create an Action that returns a plain text message after a delay
-   * of 1 second.
-   *
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/message`.
-   */
-  def message = Action.async {
-    getFutureMessage(1.second).map { msg => Ok(msg) }
-  }
-
-  private def getFutureMessage(delayTime: FiniteDuration): Future[String] = {
-    val promise: Promise[String] = Promise[String]()
-    actorSystem.scheduler.scheduleOnce(delayTime) { promise.success("Hi!") }
-    promise.future
+  def socket = WebSocket.acceptWithActor[String, String] { request => out =>
+    MyWebSocketActor.props(out)
   }
 
 }
