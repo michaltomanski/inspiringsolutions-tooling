@@ -14,6 +14,7 @@ object Global extends GlobalSettings {
     println("startup")
 
     val tw = Play.unsafeApplication.injector.instanceOf[TwitterService]
+    tw.processStreamToActorRef(webSocketCoordinator)
   }
 
 }

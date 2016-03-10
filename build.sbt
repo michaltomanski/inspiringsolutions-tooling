@@ -10,12 +10,14 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  "com.typesafe.akka" %% "akka-stream-testkit" % "2.4.2" % Test,
   "com.typesafe.akka" %% "akka-actor" % "2.4.2",
   "com.typesafe.akka" %% "akka-http-experimental" % "2.4.2",
   "com.typesafe.akka" %% "akka-stream" % "2.4.2",
   "org.json4s" %% "json4s-native" % "3.3.0",
-  "com.hunorkovacs" %% "koauth" % "1.1.0"
+  "com.hunorkovacs" %% "koauth" % "1.1.0",
+  "com.typesafe.akka" %% "akka-stream-testkit" % "2.4.2" % Test,
+  "com.typesafe.akka" %% "akka-testkit" % "2.4.2" % Test,
+  "org.scalatest" % "scalatest_2.11" % "3.0.0-M15" % Test
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
