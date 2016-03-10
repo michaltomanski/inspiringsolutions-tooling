@@ -7,6 +7,7 @@ import akka.util.Timeout
 import core.Global
 object MyWebSocketActor {
   def props(out: ActorRef) = Props(new MyWebSocketActor(out, Global.webSocketCoordinator))
+  val WordFilter = "java"
 }
 
 class MyWebSocketActor(out: ActorRef, coordinator: ActorRef) extends Actor {
@@ -19,8 +20,9 @@ class MyWebSocketActor(out: ActorRef, coordinator: ActorRef) extends Actor {
   }
 
   override def preStart() {
-    println("---------------- Registering socket actor")
-    coordinator ! RegisterSocketActor("d", self)
+    println("---------------- Registering new socket actor ----------------")
+    // For now we register all sockets to listen for everything that
+    coordinator ! RegisterSocketActor(MyWebSocketActor.WordFilter, self)
   }
 
 
