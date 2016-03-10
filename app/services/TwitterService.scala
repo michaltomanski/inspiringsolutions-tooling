@@ -1,19 +1,19 @@
-package actors
+package services
 
-
+import actors.WebSocketActor
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpHeader.ParsingResult
 import akka.http.scaladsl.model.{ContentType, MediaTypes, _}
 import akka.stream.ActorMaterializer
 import com.google.inject.ImplementedBy
-import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
-import org.json4s.DefaultFormats
 import com.hunorkovacs.koauth.domain.KoauthRequest
-import models.Tweet
-import org.json4s.native.JsonMethods._
+import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
 import com.typesafe.config.ConfigFactory
 import core.Global
+import models.Tweet
+import org.json4s.DefaultFormats
+import org.json4s.native.JsonMethods._
 import play.api.Play
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,7 +41,7 @@ class TwitterServiceImpl extends TwitterService {
 
   private val consumer = new DefaultConsumerService(actorSystem.dispatcher)
 
-  val body = s"track=${MyWebSocketActor.WordFilter}"
+  val body = s"track=${WebSocketActor.WordFilter}"
   val source = Uri(url)
 
   //Create Oauth 1a header
@@ -90,7 +90,7 @@ class TwitterServiceImpl extends TwitterService {
               case Success(tweet) =>
                 println("-----")
                 println(tweet.text)
-                Global.webSocketCoordinator ! tweet.text
+                Global.webSocketCoordinator ! tweet
               case Failure(e) =>
                 println("-----")
                 println(e.getStackTrace)

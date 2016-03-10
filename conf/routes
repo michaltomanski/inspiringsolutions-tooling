@@ -5,7 +5,7 @@
 # An example controller showing a sample home page
 GET     /                           @controllers.HomeController.index
 
-GET     /twits/channel              @controllers.AsyncController.socket
+GET     /twits/channel              @controllers.WebSocketController.socket
 
 
 # Map static resources from the /public folder to the /assets URL path
