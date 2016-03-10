@@ -23,3 +23,4 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 herokuAppName in Compile := "peaceful-ridge-14628"
 
+routesGenerator := InjectedRoutesGenerator

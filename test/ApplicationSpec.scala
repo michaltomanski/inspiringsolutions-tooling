@@ -1,5 +1,3 @@
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import org.scalatestplus.play._
 import play.api.test._
 import play.api.test.Helpers._
@@ -10,30 +8,30 @@ import play.api.test.Helpers._
  * For more information, consult the wiki.
  */
 class ApplicationSpec extends PlaySpec with OneAppPerTest  {
-  "Routes" should {
-
-    "send 404 on a bad request" in  {
-      running(FakeApplication()) {
-        route(app, FakeRequest(GET, "/boum")).map(status(_)) mustBe Some(NOT_FOUND)
-
-      }
-    }
-
-  }
-
-  "HomeController" should {
-
-    "render the index page" in {
-      running(FakeApplication()) {
-
-        val home = route(app, FakeRequest(GET, "/")).get
-
-        status(home) mustBe OK
-        contentType(home) mustBe Some("text/html")
-        contentAsString(home) must include("Your new application is ready.")
-      }
-    }
-  }
+//  "Routes" should {
+//
+//    "send 404 on a bad request" in  {
+//      running(FakeApplication()) {
+//        route(app, FakeRequest(GET, "/boum")).map(status(_)) mustBe Some(NOT_FOUND)
+//
+//      }
+//    }
+//
+//  }
+//
+//  "HomeController" should {
+//
+//    "render the index page" in {
+//      running(FakeApplication()) {
+//
+//        val home = route(app, FakeRequest(GET, "/")).get
+//
+//        status(home) mustBe OK
+//        contentType(home) mustBe Some("text/html")
+//        contentAsString(home) must include("Your new application is ready.")
+//      }
+//    }
+//  }
 
 
 }

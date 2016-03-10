@@ -24,6 +24,8 @@ import scala.util.{Failure, Success, Try}
 trait TwitterService
 
 class TwitterServiceImpl extends TwitterService {
+  println(" ================================ IMPL")
+
   implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
 
   val conf = ConfigFactory.load()
