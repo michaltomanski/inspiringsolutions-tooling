@@ -1,11 +1,11 @@
 import com.google.inject.AbstractModule
-import services.TwitterService
+import services.{TwitterService, TwitterStreamService}
 
 /**
   * Created by mtomanski on 09.03.16.
   */
 class Module extends AbstractModule  {
   override protected def configure(): Unit = {
-    bind(classOf[TwitterService]).to(classOf[TwitterServiceMock])
+    bind(classOf[TwitterStreamService]).to(classOf[TwitterStreamServiceMock])
   }
 }
