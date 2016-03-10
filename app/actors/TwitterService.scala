@@ -42,7 +42,7 @@ class TwitterServiceImpl extends TwitterService {
 
   private val consumer = new DefaultConsumerService(actorSystem.dispatcher)
 
-  val body = "track=fuck"
+  val body = "track=java"
   val source = Uri(url)
 
   //Create Oauth 1a header
@@ -89,6 +89,8 @@ class TwitterServiceImpl extends TwitterService {
             .map(json => Try(parse(json).extract[Tweet]))
             .runForeach {
               case Success(tweet) =>
+                println("-----")
+                println(tweet.text)
                 Global.webSocketCoordinator ! tweet.text
               case Failure(e) =>
                 println("-----")
