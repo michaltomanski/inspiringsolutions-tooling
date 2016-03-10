@@ -7,7 +7,7 @@ import akka.actor._
   */
 class WebSocketCoordinator extends Actor {
 
-  var actorMap = Map[String, ActorRef]()
+  var actorMap = Map[String, Seq[ActorRef]]()
 
   override def receive() = {
     case RegisterSocketActor(hashTag, ref) =>
@@ -17,16 +17,17 @@ class WebSocketCoordinator extends Actor {
   }
 
   private def forwardTwit(msg: String) {
-    actorMap.foreach{ case (tag, ref) =>
-      ref ! msg
+    actorMap.get(MyWebSocketActor.WordFilter).foreach{ refs =>
+      refs.foreach { ref => ref ! msg}
     }
   }
 
   private def handleNewSocketActor(hashTag: String, ref: ActorRef) {
-    val newRefSeq = actorMap.getOrElse(hashTag, ref)
+    val newRefSeq = actorMap.get(hashTag)
+      .map { refSeq => ref +: refSeq }
+      .getOrElse(Seq(ref))
 
     actorMap += (hashTag -> newRefSeq)
-
     println(s" --------- new socket actor registered for #$hashTag")
   }
 

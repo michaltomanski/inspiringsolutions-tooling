@@ -24,9 +24,8 @@ import scala.util.{Failure, Success, Try}
 trait TwitterService
 
 class TwitterServiceImpl extends TwitterService {
-  println(" ================================ IMPL")
-
   implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
+
 
   val conf = ConfigFactory.load()
 
@@ -42,7 +41,7 @@ class TwitterServiceImpl extends TwitterService {
 
   private val consumer = new DefaultConsumerService(actorSystem.dispatcher)
 
-  val body = "track=java"
+  val body = s"track=${MyWebSocketActor.WordFilter}"
   val source = Uri(url)
 
   //Create Oauth 1a header
