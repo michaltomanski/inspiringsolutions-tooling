@@ -1,6 +1,6 @@
 package services
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import org.json4s.native.JsonMethods._
 import actors.WebSocketActor
@@ -15,13 +15,14 @@ import scala.util.{Failure, Success, Try}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+@Singleton
 class TwitterService @Inject() (twitterStreamService: TwitterStreamService)  {
   implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
   implicit val materializer = ActorMaterializer()
 
   implicit val formats = DefaultFormats
 
-  def processStreamToActorRef(actorRef: ActorRef): Future[Future[Done]] = {
+  def processStreamToActorRef(coordinatorRef: ActorRef): Future[Future[Done]] = {
     val stream = twitterStreamService.produceStream(WebSocketActor.WordFilter)
 
     stream.map(_.scan("")((acc, curr) => if (acc.contains("\r\n")) curr.utf8String else acc + curr.utf8String)
@@ -31,7 +32,7 @@ class TwitterService @Inject() (twitterStreamService: TwitterStreamService)  {
         case Success(tweet) =>
           println("-----")
           println(tweet.text)
-          actorRef ! tweet
+          coordinatorRef ! tweet
         case Failure(e) =>
           println("-----")
           println(e.getStackTrace)
