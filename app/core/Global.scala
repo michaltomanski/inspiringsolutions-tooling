@@ -1,8 +1,9 @@
 package core
 
-import actors.{TwitterService, WebSocketCoordinator}
+import actors.WebSocketCoordinator
 import akka.actor.ActorSystem
 import play.api.{GlobalSettings, Play}
+import services.TwitterService
 
 object Global extends GlobalSettings {
   lazy val actorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]

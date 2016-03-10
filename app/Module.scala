@@ -1,4 +1,3 @@
-import actors.{TwitterService, TwitterServiceImpl}
 import com.google.inject.AbstractModule
 
 /**

@@ -1,6 +1,7 @@
 package actors
 
 import akka.actor._
+import models.Tweet
 
 /**
   * Created by mtomanski on 09.03.16.
@@ -12,13 +13,13 @@ class WebSocketCoordinator extends Actor {
   override def receive() = {
     case RegisterSocketActor(hashTag, ref) =>
       handleNewSocketActor(hashTag, ref)
-    case msg: String =>
-      forwardTwit(msg)
+    case tweet: Tweet =>
+      forwardTwit(tweet)
   }
 
-  private def forwardTwit(msg: String) {
-    actorMap.get(MyWebSocketActor.WordFilter).foreach{ refs =>
-      refs.foreach { ref => ref ! msg}
+  private def forwardTwit(tweet: Tweet) {
+    actorMap.get(WebSocketActor.WordFilter).foreach{ refs =>
+      refs.foreach { ref => ref ! tweet}
     }
   }
 

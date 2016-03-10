@@ -1,5 +1,5 @@
-import actors.TwitterService
 import com.google.inject.AbstractModule
+import services.TwitterService
 
 /**
   * Created by mtomanski on 09.03.16.

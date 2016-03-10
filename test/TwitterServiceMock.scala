@@ -1,4 +1,4 @@
-import actors.TwitterService
+import services.TwitterService
 
 /**
   * Created by mtomanski on 09.03.16.
