@@ -7,7 +7,6 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpHeader.ParsingResult
 import akka.http.scaladsl.model.{ContentType, MediaTypes, _}
 import akka.stream.ActorMaterializer
-import akka.util.ByteString
 import com.hunorkovacs.koauth.domain.KoauthRequest
 import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
 import play.api.Play
@@ -26,14 +25,9 @@ class TwitterStreamServiceImpl extends TwitterStreamService {
   private val url = "https://stream.twitter.com/1.1/statuses/filter.json"
 
   implicit val materializer = ActorMaterializer()
-
   private val consumer = new DefaultConsumerService(actorSystem.dispatcher)
 
-
-
   def produceStream(trackWord: String) = {
-    println(" -------------- PRODUCE STREAM STARTET IMPL")
-
     val source = Uri(url)
     val body = s"track=$trackWord"
 

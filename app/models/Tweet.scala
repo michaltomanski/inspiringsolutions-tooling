@@ -34,10 +34,6 @@ case class Tweet(
                   withheldInCountries: Option[Seq[String]],
                   withheldScope: Option[String]
                 )
-object Tweet {
-  def emptyTweet = Tweet(null, null, null, null, null, null, null, null, 0L, null, null, null, null, null, null, null, null, null, null, null, null, null,
-    0, null, null, null, null, false, null, null, null, null)
-}
 
 case class Users(
                   contributors_enabled: Boolean,

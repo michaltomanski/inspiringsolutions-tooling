@@ -2,13 +2,10 @@ import javax.inject.Inject
 
 import actors.{WebSocketActor, WebSocketCoordinator}
 import akka.actor.ActorSystem
-import akka.stream.scaladsl.Source
 import akka.testkit.{DefaultTimeout, ImplicitSender, TestKit, TestProbe}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import play.api.Play
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.FakeApplication
-import services.{TwitterService, TwitterStreamService}
+import services.TwitterStreamService
 import play.api.test.Helpers._
 import play.api.inject.bind
 
@@ -26,15 +23,23 @@ class TwitterStreamSpec extends TestKit(ActorSystem("TwitterStreamSpec")) with D
     .overrides(bind[TwitterStreamService].to[TwitterStreamServiceMock])
     .build
 
-  "socket uctor" must {
-    "receive a message" in {
+  "socket actor" must {
+    "receive a message containing `java`" in {
       running(application) {
-        //val tw = Play.unsafeApplication.injector.instanceOf[TwitterService]
-        //tw.processStreamToActorRef(self)
         val socketActor = system.actorOf(WebSocketActor.props(socketRef.ref))
-        val x = 1+1
-        socketRef.expectMsg(2500.millis)
-        true should be(true)
+
+        val msg = socketRef.receiveOne(2.seconds).asInstanceOf[String]
+        msg.toLowerCase.contains("java") should be(true)
+      }
+    }
+
+    "receive a message processed correctly" in {
+      running(application) {
+        val msg = socketRef.receiveOne(2.seconds).asInstanceOf[String]
+        val lines = msg.split("::::").map(_.trim)
+
+        lines(1).contains("Length:") should be(true)
+        lines(2).reverse should be(lines(3))
       }
     }
   }

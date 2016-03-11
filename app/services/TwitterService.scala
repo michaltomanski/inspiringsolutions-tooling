@@ -26,7 +26,6 @@ class TwitterService @Inject() (twitterStreamService: TwitterStreamService)  {
     val stream = twitterStreamService.produceStream(WebSocketActor.WordFilter)
 
     stream.map(_.scan("")((acc, curr) => if (acc.contains("\r\n")) curr.utf8String else acc + curr.utf8String)
-      .filter(_.contains("\r\n"))
       .map(json => Try(parse(json).extract[Tweet]))
       .runForeach {
         case Success(tweet) =>
@@ -34,7 +33,7 @@ class TwitterService @Inject() (twitterStreamService: TwitterStreamService)  {
           println(tweet.text)
           coordinatorRef ! tweet
         case Failure(e) =>
-          println("-----")
+          println("*****")
           println(e.getStackTrace)
       }
     )
