@@ -5,6 +5,9 @@ import akka.util.ByteString
 import models.Tweet
 import services.TwitterStreamService
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
+
 import scala.concurrent.Future
 
 /**
@@ -13,6 +16,7 @@ import scala.concurrent.Future
 class TwitterStreamServiceMock extends TwitterStreamService {
 
   override def produceStream(trackWord: String): Future[Source[ByteString, Any]] = {
+    println(" -------------- PRODUCE STREAM STARTET MOCK")
     val tweet = Tweet.emptyTweet
     Future( Source(List(toByteString(tweet))) )
   }

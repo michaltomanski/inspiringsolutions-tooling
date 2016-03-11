@@ -1,4 +1,6 @@
-import com.google.inject.AbstractModule
+import play.api.{Configuration, Environment}
+import play.api.inject.Module
+import services.{TwitterStreamService, TwitterStreamServiceImpl}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -10,9 +12,10 @@ import com.google.inject.AbstractModule
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-class Module extends AbstractModule {
+class ComponentModule extends Module {
 
-  override def configure() = {
-  }
+  def bindings(env: Environment, conf: Configuration) = Seq(
+    bind[TwitterStreamService].to[TwitterStreamServiceImpl]
+  )
 
 }

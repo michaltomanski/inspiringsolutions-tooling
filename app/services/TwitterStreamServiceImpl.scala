@@ -32,6 +32,8 @@ class TwitterStreamServiceImpl extends TwitterStreamService {
 
 
   def produceStream(trackWord: String) = {
+    println(" -------------- PRODUCE STREAM STARTET IMPL")
+
     val source = Uri(url)
     val body = s"track=$trackWord"
 

@@ -27,9 +27,9 @@ class WebSocketCoordinator extends Actor {
 
   private def handleNewSocketActor(hashTag: String, ref: ActorRef) {
     if (actorMap.isEmpty) {
+      println(" ---------- starting Twitter Service ------ ")
       val tw = Play.unsafeApplication.injector.instanceOf[TwitterService]
       tw.processStreamToActorRef(self)
-      println(" ---------- starting Twitter Service ------ ")
     }
 
     val newRefSeq = actorMap.get(hashTag)
