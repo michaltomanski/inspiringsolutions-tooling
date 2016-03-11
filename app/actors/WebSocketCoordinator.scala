@@ -2,6 +2,8 @@ package actors
 
 import akka.actor._
 import models.Tweet
+import play.api.Play
+import services.TwitterService
 
 /**
   * Created by mtomanski on 09.03.16.
@@ -24,12 +26,19 @@ class WebSocketCoordinator extends Actor {
   }
 
   private def handleNewSocketActor(hashTag: String, ref: ActorRef) {
+    if (actorMap.isEmpty) {
+      println(" ---------- starting Twitter Service ------ ")
+      val tw = Play.unsafeApplication.injector.instanceOf[TwitterService]
+      tw.processStreamToActorRef(self)
+    }
+
     val newRefSeq = actorMap.get(hashTag)
       .map { refSeq => ref +: refSeq }
       .getOrElse(Seq(ref))
 
     actorMap += (hashTag -> newRefSeq)
     println(s" --------- new socket actor registered for #$hashTag")
+
   }
 
 }

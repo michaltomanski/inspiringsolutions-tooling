@@ -34,6 +34,7 @@ case class Tweet(
                   withheldInCountries: Option[Seq[String]],
                   withheldScope: Option[String]
                 )
+
 case class Users(
                   contributors_enabled: Boolean,
                   created_at: String,
