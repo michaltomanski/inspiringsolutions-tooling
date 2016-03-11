@@ -5,3 +5,5 @@
 [![Heroku](https://heroku-badge.herokuapp.com/?app=peaceful-ridge-14628)](https://peaceful-ridge-14628.herokuapp.com/)
 
 Sample project used for workshops during Inspiring Solutions conference
+
+The websocket location is ws://peaceful-ridge-14628.herokuapp.com/twits/channel
