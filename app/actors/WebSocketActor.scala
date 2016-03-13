@@ -25,13 +25,12 @@ class WebSocketActor(out: ActorRef, coordinator: ActorRef) extends Actor {
   }
 
   override def preStart() {
-    println("---------------- Registering new socket actor ----------------")
     // For now we register all sockets to listen for the same word appearing in tweet
-    coordinator ! RegisterSocketActor(WebSocketActor.WordFilter, self)
+    coordinator ! RegisterSocketActor(WebSocketActor.WordFilter)
   }
 
   override def postStop() {
-    println("---------------- Socket has been closed ----------------")
+    coordinator ! UnregisterSocketActor(WebSocketActor.WordFilter)
   }
 
 }

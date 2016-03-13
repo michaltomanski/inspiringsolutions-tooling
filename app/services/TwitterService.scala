@@ -4,7 +4,6 @@ import javax.inject.{Inject, Singleton}
 
 import org.json4s.native.JsonMethods._
 import actors.WebSocketActor
-import akka.Done
 import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.ActorMaterializer
 import models.Tweet
@@ -22,21 +21,23 @@ class TwitterService @Inject() (twitterStreamService: TwitterStreamService)  {
 
   implicit val formats = DefaultFormats
 
-  def processStreamToActorRef(coordinatorRef: ActorRef): Future[Future[Done]] = {
-    val stream = twitterStreamService.produceStream(WebSocketActor.WordFilter)
+  def processStreamToActorRef(coordinatorRef: ActorRef): Unit = {
+    val streamFuture = twitterStreamService.produceStream(WebSocketActor.WordFilter)
 
-    stream.map(_.scan("")((acc, curr) => if (acc.contains("\r\n")) curr.utf8String else acc + curr.utf8String)
-      .map(json => Try(parse(json).extract[Tweet]))
-      .runForeach {
-        case Success(tweet) =>
-          println("-----")
-          println(tweet.text)
-          coordinatorRef ! tweet
-        case Failure(e) =>
-          println("*****")
-          println(e.getStackTrace)
-      }
-    )
+    streamFuture.onComplete {
+      case Failure(ex) => ex.printStackTrace()
+      case Success(stream) =>
+        stream.scan("")((acc, curr) => if (acc.contains("\r\n")) curr.utf8String else acc + curr.utf8String)
+          .filter(_.contains("\r\n")).filterNot(_.trim.isEmpty)
+          .map(json => Try(parse(json).extract[Tweet]))
+          .runForeach {
+            case Success(tweet) =>
+              println("-----")
+              println(tweet.text)
+              coordinatorRef ! tweet
+            case Failure(e) =>
+              e.printStackTrace()
+          }
+    }
   }
-
 }

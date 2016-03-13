@@ -13,10 +13,12 @@ class WebSocketCoordinator extends Actor {
   var actorMap = Map[String, Seq[ActorRef]]()
 
   override def receive() = {
-    case RegisterSocketActor(hashTag, ref) =>
-      handleNewSocketActor(hashTag, ref)
+    case RegisterSocketActor(hashTag) =>
+      handleNewSocketActor(hashTag, sender())
     case tweet: Tweet =>
       forwardTwit(tweet)
+    case UnregisterSocketActor(hashTag) =>
+      handleUnregisterSocketActor(hashTag, sender())
   }
 
   private def forwardTwit(tweet: Tweet) {
@@ -41,10 +43,18 @@ class WebSocketCoordinator extends Actor {
 
   }
 
+  private def handleUnregisterSocketActor(hashTag: String, ref: ActorRef): Unit = {
+    val newRefSeq = actorMap.get(hashTag).map(_.filterNot(_ == ref)).getOrElse(Seq.empty)
+    actorMap += (hashTag -> newRefSeq)
+    println(s" --------- socket actor unregistered for #$hashTag")
+  }
+
 }
 
 object WebSocketCoordinator {
   def props = Props(new WebSocketCoordinator)
 }
 
-case class RegisterSocketActor(hashTag: String, ref: ActorRef)
+case class RegisterSocketActor(hashTag: String)
+
+case class UnregisterSocketActor(hashTag: String)
