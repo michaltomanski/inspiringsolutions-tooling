@@ -1,6 +1,4 @@
-import javax.inject.Inject
-
-import actors.{WebSocketActor, WebSocketCoordinator}
+import actors.WebSocketActor
 import akka.actor.ActorSystem
 import akka.testkit.{DefaultTimeout, ImplicitSender, TestKit, TestProbe}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -24,18 +22,19 @@ class TwitterStreamSpec extends TestKit(ActorSystem("TwitterStreamSpec")) with D
     .build
 
   "socket actor" must {
-    "receive a message containing `java`" in {
+    "receive a message containing `java` and `scala`" in {
       running(application) {
-        val socketActor = system.actorOf(WebSocketActor.props(socketRef.ref))
+        val socketActor = system.actorOf(WebSocketActor.props(socketRef.ref, "scala"))
 
-        val msg = socketRef.receiveOne(2.seconds).asInstanceOf[String]
+        val msg = socketRef.receiveOne(10.seconds).asInstanceOf[String]
         msg.toLowerCase.contains("java") should be(true)
+        msg.toLowerCase.contains("scala") should be(true)
       }
     }
 
     "receive a message processed correctly" in {
       running(application) {
-        val msg = socketRef.receiveOne(2.seconds).asInstanceOf[String]
+        val msg = socketRef.receiveOne(10.seconds).asInstanceOf[String]
         val lines = msg.split("::::").map(_.trim)
 
         lines(1).contains("Length:") should be(true)

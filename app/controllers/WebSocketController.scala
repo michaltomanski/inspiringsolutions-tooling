@@ -10,10 +10,10 @@ import play.api.Play.current
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class WebSocketController @Inject()()(implicit exec: ExecutionContext, actorSystem: ActorSystem) extends Controller {
+class WebSocketController @Inject() () (implicit exec: ExecutionContext, actorSystem: ActorSystem) extends Controller {
 
-  def socket = WebSocket.acceptWithActor[String, String] { request => out =>
-    WebSocketActor.props(out)
+  def socket(tag: String) = WebSocket.acceptWithActor[String, String] { request => out =>
+    WebSocketActor.props(out, tag)
   }
 
 }
