@@ -1,0 +1,29 @@
+{
+  "name": "tweet-fetcher-front",
+  "version": "1.0.0",
+  "scripts": {
+    "prepublish": "typings install && webpack --color --progress"
+  },
+  "author": "Pawel Dolega",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap-datepicker": "^1.6.0",
+    "classnames": "^2.2.1",
+    "lodash": "^4.6.0",
+    "react": "^0.14.7",
+    "react-addons-linked-state-mixin": "^0.14.7",
+    "react-bootstrap": "^0.27.3",
+    "react-dom": "^0.14.7"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^0.15.9",
+    "concatenify": "^1.0.0",
+    "css-loader": "^0.23.0",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
+    "typescript": "1.8.2",
+    "typings": "^0.6.9",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.9"
+  }
+}

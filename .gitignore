@@ -16,3 +16,8 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 .idea
+
+node_modules/
+typings/
+
+public/javascripts/

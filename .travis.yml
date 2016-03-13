@@ -1,15 +1,19 @@
 language: scala
 scala:
-    - "2.11.8"
+  - "2.11.8"
 
 jdk:
-    - oraclejdk8
+  - oraclejdk8
+
+node_js:
+  - "4.2.2"
 
 branches:
   only:
     - master
 
 script:
+  - npm install
   - sbt compile coverage test coverageReport codacyCoverage
 
   # Tricks to avoid unnecessary cache updates
