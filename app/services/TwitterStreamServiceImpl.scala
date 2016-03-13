@@ -9,6 +9,7 @@ import akka.http.scaladsl.model.{ContentType, MediaTypes, _}
 import akka.stream.ActorMaterializer
 import com.hunorkovacs.koauth.domain.KoauthRequest
 import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
+import com.typesafe.config.ConfigFactory
 import play.api.Play
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -18,10 +19,10 @@ class TwitterStreamServiceImpl extends TwitterStreamService {
   implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
 
   //Get your credentials from https://apps.twitter.com and replace the values below
-  private val consumerKey = "bgQEXVhm1HsTxF4Eq2eC3CuFd"
-  private val consumerSecret = "akz50EktUmJQq4Q2U52BkHgMJwRt3rVZHbJ7K0aclBapbrSdJe"
-  private val accessToken = "706874741957783560-ja2IiSQ0ZQ5PPsGroIPCjp8p4tzpwmx"
-  private val accessTokenSecret = "g1LdmijUXAXgPhjqZEoVoOePXwUhECZXTDi3b6xAY6qoM"
+  private val consumerKey = ConfigFactory.load().getString("twitter.config.consumer.key")
+  private val consumerSecret = ConfigFactory.load().getString("twitter.config.consumer.secret")
+  private val accessToken = ConfigFactory.load().getString("twitter.config.access.token.key")
+  private val accessTokenSecret = ConfigFactory.load().getString("twitter.config.access.token.secret")
   private val url = "https://stream.twitter.com/1.1/statuses/filter.json"
 
   implicit val materializer = ActorMaterializer()
