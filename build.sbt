@@ -1,4 +1,4 @@
-name := """Twit Fetcher (InspiringSolutions)"""
+name := """Tweet Fetcher (InspiringSolutions)"""
 
 version := "1.0-SNAPSHOT"
 
