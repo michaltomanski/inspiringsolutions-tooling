@@ -11,7 +11,7 @@ import services.TwitterProcessor
 
 object WebSocketActor {
   def props(out: ActorRef, tag: String) = Props(new WebSocketActor(out, Global.webSocketCoordinator, tag))
-  val WordFilter = "#inspiringsolutions"
+  val WordFilter = "inspiringsolutions"
 }
 
 class WebSocketActor (out: ActorRef, coordinator: ActorRef, tag: String) extends Actor {
