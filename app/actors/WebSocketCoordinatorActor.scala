@@ -8,7 +8,7 @@ import services.TwitterService
 /**
   * Created by mtomanski on 09.03.16.
   */
-class WebSocketCoordinator extends Actor {
+class WebSocketCoordinatorActor extends Actor {
 
   var actorMap = Map[String, Seq[ActorRef]]()
 
@@ -22,7 +22,7 @@ class WebSocketCoordinator extends Actor {
   }
 
   private def forwardTwit(tweet: Tweet) {
-    actorMap.get(WebSocketActor.WordFilter).foreach{ refs =>
+    actorMap.filter{case (tag, refs) => tweet.text.toLowerCase.contains(tag.toLowerCase)}.foreach{ case (tag, refs) =>
       refs.foreach { ref => ref ! tweet}
     }
   }
@@ -39,7 +39,7 @@ class WebSocketCoordinator extends Actor {
       .getOrElse(Seq(ref))
 
     actorMap += (hashTag -> newRefSeq)
-    println(s" --------- new socket actor registered for #$hashTag")
+    println(s" --------- new socket actor registered for `$hashTag`")
 
   }
 
@@ -51,10 +51,12 @@ class WebSocketCoordinator extends Actor {
 
 }
 
-object WebSocketCoordinator {
-  def props = Props(new WebSocketCoordinator)
-}
 
 case class RegisterSocketActor(hashTag: String)
 
 case class UnregisterSocketActor(hashTag: String)
+
+
+object WebSocketCoordinatorActor {
+  def props = Props(new WebSocketCoordinatorActor)
+}

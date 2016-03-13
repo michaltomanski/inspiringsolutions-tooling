@@ -12,7 +12,7 @@ import scala.concurrent.duration._
 class TwitterStreamServiceMock extends TwitterStreamService {
 
   override def produceStream(trackWord: String): Future[Source[ByteString, Any]] = {
-    Future( Source.tick(0.seconds, 200.millisecond, toByteString(sampleTweetString)) )
+    Future( Source.tick(0.seconds, 100.millisecond, toByteString(sampleTweetString)) )
   }
 
   private def toByteString(obj: String): ByteString = {
