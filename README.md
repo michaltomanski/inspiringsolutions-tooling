@@ -6,4 +6,4 @@
 
 Sample project used for workshops during Inspiring Solutions conference
 
-The websocket location is ws://peaceful-ridge-14628.herokuapp.com/twits/channel
+The websocket location is ws://peaceful-ridge-14628.herokuapp.com/channel
