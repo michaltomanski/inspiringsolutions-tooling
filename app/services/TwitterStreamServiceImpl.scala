@@ -65,11 +65,11 @@ class TwitterStreamServiceImpl extends TwitterStreamService {
 
       val request = Http().singleRequest(httpRequest)
       request.map { response =>
-        if (response.status.intValue() != 200) {
-          println(response.entity.dataBytes.runForeach(_.utf8String))
-          throw new HTTPException(response.status.intValue())
-        } else {
-          response.entity.dataBytes
+        response.status.intValue() match {
+          case 200 => response.entity.dataBytes
+          case _ =>
+            println(s"${response.status.intValue} ${response.status.reason}")
+            throw new HTTPException(response.status.intValue())
         }
       }
     }
