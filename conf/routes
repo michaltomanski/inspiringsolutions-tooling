@@ -3,9 +3,12 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           @controllers.HomeController.index
+GET     /                           @com.inspiringsolutions.tweet.controllers.HomeController.index
 
-GET     /channel/:tag               @controllers.WebSocketController.socket(tag: String)
+GET     /channel                    @com.inspiringsolutions.tweet.controllers.WebSocketController.socket(filter: Option[String])
+
+GET     /restart/:hashTag           @com.inspiringsolutions.tweet.controllers.WebSocketController.startStraming(hashTag)
+GET     /stop                       @com.inspiringsolutions.tweet.controllers.WebSocketController.stopStreaming
 
 
 # Map static resources from the /public folder to the /assets URL path

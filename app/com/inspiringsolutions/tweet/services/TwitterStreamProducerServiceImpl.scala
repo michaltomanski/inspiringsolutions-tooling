@@ -1,4 +1,4 @@
-package services
+package com.inspiringsolutions.tweet.services
 
 import javax.xml.ws.http.HTTPException
 
@@ -7,6 +7,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpHeader.ParsingResult
 import akka.http.scaladsl.model.{ContentType, MediaTypes, _}
 import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.Source
+import akka.util.ByteString
 import com.hunorkovacs.koauth.domain.KoauthRequest
 import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
 import com.typesafe.config.ConfigFactory
@@ -15,7 +17,7 @@ import play.api.Play
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TwitterStreamServiceImpl extends TwitterStreamService {
+class TwitterStreamProducerServiceImpl extends TwitterStreamProducerService {
   implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
 
   //Get your credentials from https://apps.twitter.com and replace the values below
@@ -28,7 +30,7 @@ class TwitterStreamServiceImpl extends TwitterStreamService {
   implicit val materializer = ActorMaterializer()
   private val consumer = new DefaultConsumerService(actorSystem.dispatcher)
 
-  def produceStream(trackWord: String) = {
+  def produceStream(trackWord: String): Future[Source[ByteString, Any]] = {
     val source = Uri(url)
     val body = s"track=$trackWord"
 
@@ -57,6 +59,7 @@ class TwitterStreamServiceImpl extends TwitterStreamService {
           case _ => None
         }
       ).flatten
+
       val httpRequest: HttpRequest = HttpRequest(
         method = HttpMethods.POST,
         uri = source,
@@ -66,8 +69,9 @@ class TwitterStreamServiceImpl extends TwitterStreamService {
 
       val request = Http().singleRequest(httpRequest)
       request.map { response =>
-        response.status.intValue() match {
+        response.status.intValue match {
           case 200 => response.entity.dataBytes
+          case 420 => throw new IllegalStateException("Filter to wide...")
           case _ =>
             println(s"${response.status.intValue} ${response.status.reason}")
             throw new HTTPException(response.status.intValue())

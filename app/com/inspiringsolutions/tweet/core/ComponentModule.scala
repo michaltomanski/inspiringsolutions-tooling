@@ -1,12 +1,14 @@
-import play.api.{Configuration, Environment}
+package com.inspiringsolutions.tweet.core
+
+import com.inspiringsolutions.tweet.services.{TwitterStreamProducerService, TwitterStreamProducerServiceImpl}
 import play.api.inject.Module
-import services.{TwitterStreamService, TwitterStreamServiceImpl}
+import play.api.{Configuration, Environment}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
  * different types. This Guice module is created when the Play
  * application starts.
-
+ *
  * Play will automatically use any class called `Module` that is in
  * the root package. You can create modules in other locations by
  * adding `play.modules.enabled` settings to the `application.conf`
@@ -15,7 +17,7 @@ import services.{TwitterStreamService, TwitterStreamServiceImpl}
 class ComponentModule extends Module {
 
   def bindings(env: Environment, conf: Configuration) = Seq(
-    bind[TwitterStreamService].to[TwitterStreamServiceImpl]
+    bind[TwitterStreamProducerService].to[TwitterStreamProducerServiceImpl]
   )
 
 }
