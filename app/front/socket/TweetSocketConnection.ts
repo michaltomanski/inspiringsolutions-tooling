@@ -17,7 +17,7 @@ export class TweetSocketConnection {
     }
 
     connect(filter?: string) {
-        let protocol = "ws";
+        let protocol = (window.location.protocol == "http:") ? "ws" : "wss";
         let host = window.location.host;
         let webSocketUrl = `${protocol}://${host}/channel` + (filter != null ? `?filter=${filter}` : "");
         console.debug(`Actual websocket address: ${webSocketUrl}`);
