@@ -1,14 +1,10 @@
 {
   "ambientDependencies": {
-    "bootstrap.datepicker": "github:DefinitelyTyped/DefinitelyTyped/bootstrap.datepicker/bootstrap.datepicker.d.ts#4de74cb527395c13ba20b438c3a7a419ad931f1c",
     "classnames": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts#8287192198a14bcb31533afe381aa24ac7eed4c6",
-    "es6-promise": "github:DefinitelyTyped/DefinitelyTyped/es6-promise/es6-promise.d.ts#e1699c41087960df7678f413312213fb1f980307",
-    "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#661fc869669af796c6048483e999dce5732eed72",
     "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts",
-    "moment-node": "github:DefinitelyTyped/DefinitelyTyped/moment/moment-node.d.ts#1be6a281906e5cd179a97c86bd58ebf9cdc9c6a5",
     "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#945ebfe049964e429c2530971b9081f3c0f611df",
     "react-addons-linked-state-mixin": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-linked-state-mixin.d.ts",
     "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts",
-    "react-select": "github:DefinitelyTyped/DefinitelyTyped/react-select/react-select.d.ts#0074be4cf5ed6409842d115ca9dbe63e44d699a5"
+    "immutable": "github:facebook/immutable-js/type-definitions/Immutable.d.ts"
   }
 }

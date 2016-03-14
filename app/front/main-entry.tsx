@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {TweetPage} from "./TweetPage";
+import {TweetPage} from "./page/TweetPage";
 
 window["renderReact"] = function() {
     console.debug(`Sample page initialization`);
