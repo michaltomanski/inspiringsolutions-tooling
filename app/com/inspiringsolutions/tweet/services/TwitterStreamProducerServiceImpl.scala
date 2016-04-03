@@ -73,8 +73,10 @@ class TwitterStreamProducerServiceImpl extends TwitterStreamProducerService {
           case 200 => response.entity.dataBytes
           case 420 => throw new IllegalStateException("Filter to wide...")
           case _ =>
-            println(s"${response.status.intValue} ${response.status.reason}")
-            throw new HTTPException(response.status.intValue())
+            val statusCode = response.status.intValue
+            val reason = response.status.reason
+            println(s"$statusCode $reason")
+            throw new HTTPException(statusCode)
         }
       }
     }

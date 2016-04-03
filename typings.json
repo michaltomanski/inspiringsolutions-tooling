@@ -1,8 +1,8 @@
 {
   "ambientDependencies": {
-    "classnames": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts#8287192198a14bcb31533afe381aa24ac7eed4c6",
+    "classnames": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts",
     "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts",
-    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#945ebfe049964e429c2530971b9081f3c0f611df",
+    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts",
     "react-addons-linked-state-mixin": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-linked-state-mixin.d.ts",
     "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts",
     "immutable": "github:facebook/immutable-js/type-definitions/Immutable.d.ts"
