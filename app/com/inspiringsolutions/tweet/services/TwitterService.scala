@@ -4,9 +4,8 @@ import javax.inject.{Inject, Singleton}
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{Sink, Source}
-import akka.util.ByteString
-import com.inspiringsolutions.tweet.actors.{CompleteStream, TwitterConsumerActor$, WebSocketActor}
+import akka.stream.scaladsl.Sink
+import com.inspiringsolutions.tweet.actors.CompleteStream
 import com.inspiringsolutions.tweet.models.{LimitNotice, Tweet}
 import org.json4s.DefaultFormats
 import org.json4s.native.JsonMethods._
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory
 import play.api.Play
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 @Singleton

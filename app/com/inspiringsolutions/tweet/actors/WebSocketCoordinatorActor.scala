@@ -1,9 +1,10 @@
 package com.inspiringsolutions.tweet.actors
 
-import akka.actor.Status.{Success,Failure}
+import akka.actor.Status.{Failure, Success}
 import akka.actor._
 import com.inspiringsolutions.tweet.models.Tweet
 import com.inspiringsolutions.tweet.services.TwitterService
+import com.typesafe.config.ConfigFactory
 import org.slf4j.LoggerFactory
 import play.api.Play
 
@@ -28,9 +29,9 @@ class WebSocketCoordinatorActor(twitterService: TwitterService) extends Actor {
       forwardTweet(tweet)
     case UnregisterSocketActor =>
       handleUnregisterSocketActor(sender)
-    case RestartStreaming(hashTag: String) =>
+    case RestartStreaming =>
       try {
-        handleRestart(hashTag)
+        handleRestart()
         sender ! Success
       } catch {
         case e: Exception => sender ! Failure(e)
@@ -39,11 +40,12 @@ class WebSocketCoordinatorActor(twitterService: TwitterService) extends Actor {
       handleStop
   }
 
-  private def handleRestart(hashTag: String) {
+  private def handleRestart() {
     if(twitterConsumerActor.isDefined) {
       handleStop
     }
 
+    val hashTag = ConfigFactory.load().getString("twitter.filter.keyword")
     val consumerActorRef = context.actorOf(TwitterConsumerActor.props(self))
     twitterService.processStreamToActorRef(consumerActorRef, hashTag)
     twitterConsumerActor = Option(consumerActorRef)
@@ -74,7 +76,7 @@ class WebSocketCoordinatorActor(twitterService: TwitterService) extends Actor {
 
   private def handleNewSocketActor(ref: ActorRef, keyword: Option[String]) {
     if (twitterConsumerActor.isEmpty) {
-      handleRestart("inspiringsolutions")
+      handleRestart()
     }
 
     val newRefSeq = keywordMap.get(keyword)
@@ -109,7 +111,7 @@ case class RegisterSocketActor(keyword: Option[String])
 
 case object UnregisterSocketActor
 
-case class RestartStreaming(hashTag: String)
+case object RestartStreaming
 
 case object StopStreaming
 
