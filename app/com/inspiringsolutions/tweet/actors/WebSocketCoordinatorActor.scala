@@ -1,6 +1,5 @@
 package com.inspiringsolutions.tweet.actors
 
-import akka.actor.Status.{Failure, Success}
 import akka.actor._
 import com.inspiringsolutions.tweet.models.Tweet
 import com.inspiringsolutions.tweet.services.TwitterService
@@ -29,15 +28,6 @@ class WebSocketCoordinatorActor(twitterService: TwitterService) extends Actor {
       forwardTweet(tweet)
     case UnregisterSocketActor =>
       handleUnregisterSocketActor(sender)
-    case RestartStreaming =>
-      try {
-        handleRestart()
-        sender ! Success
-      } catch {
-        case e: Exception => sender ! Failure(e)
-      }
-    case StopStreaming =>
-      handleStop
   }
 
   private def handleRestart() {
@@ -110,10 +100,6 @@ class WebSocketCoordinatorActor(twitterService: TwitterService) extends Actor {
 case class RegisterSocketActor(keyword: Option[String])
 
 case object UnregisterSocketActor
-
-case object RestartStreaming
-
-case object StopStreaming
 
 object WebSocketCoordinatorActor {
   def props = Props(new WebSocketCoordinatorActor(Play.unsafeApplication.injector.instanceOf[TwitterService]))
