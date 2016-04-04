@@ -6,9 +6,9 @@ import actors.{CounterActor, GetCounter, Message}
 import akka.actor.{ActorSystem, Props}
 import play.api.mvc._
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.pattern.ask
+import akka.util.Timeout
 
 import scala.concurrent.duration._
 
@@ -17,10 +17,12 @@ class HomeController @Inject() (actorSystem: ActorSystem) extends Controller {
 
   val counterActor = actorSystem.actorOf(Props(classOf[CounterActor]))
 
+  implicit val timeout = Timeout(1.seconds)
+
   def hello(msg: String) = Action.async {
-    Future {
-      counterActor ! Message(msg)
-      Ok(s"Got $msg")
+      (counterActor ? Message(msg)).map {
+        case result: String =>
+          Ok(s"Got $result")
     }
   }
 

@@ -11,13 +11,14 @@ class CounterActor extends Actor {
 
   override def receive: Receive = {
     case Message(text: String) =>
-      handleMessage(text)
+      sender() ! handleMessage(text)
     case GetCounter =>
       sender() ! getCounter
   }
 
   private def handleMessage(text: String) = {
     charCounter += text.length
+    text
   }
 
   private def getCounter = {
