@@ -30,8 +30,8 @@ class WebSocketController @Inject() () (implicit exec: ExecutionContext, actorSy
     Future(Ok)
   }
 
-  def startStraming(hashTag: String) = Action.async {
-    Global.webSocketCoordinator ? RestartStreaming(hashTag) map { _ =>
+  def startStraming = Action.async {
+    Global.webSocketCoordinator ? RestartStreaming map { _ =>
       Ok
     } recover {
       case e: IllegalStateException =>

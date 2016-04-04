@@ -7,7 +7,7 @@ GET     /                           @com.inspiringsolutions.tweet.controllers.Ho
 
 GET     /channel                    @com.inspiringsolutions.tweet.controllers.WebSocketController.socket(filter: Option[String])
 
-GET     /restart/:hashTag           @com.inspiringsolutions.tweet.controllers.WebSocketController.startStraming(hashTag)
+GET     /restart/                   @com.inspiringsolutions.tweet.controllers.WebSocketController.startStraming
 GET     /stop                       @com.inspiringsolutions.tweet.controllers.WebSocketController.stopStreaming
 
 
