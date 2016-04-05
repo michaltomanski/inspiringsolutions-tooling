@@ -1,5 +1,6 @@
 package com.inspiringsolutions.tweet.services
 
+import javax.inject.{Inject, Singleton}
 import javax.xml.ws.http.HTTPException
 
 import akka.actor.ActorSystem
@@ -13,12 +14,13 @@ import com.hunorkovacs.koauth.domain.KoauthRequest
 import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
 import com.typesafe.config.ConfigFactory
 import play.api.Play
+import play.api.inject.guice.GuiceInjectorBuilder
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+@Singleton
 class TwitterStreamProducerServiceImpl extends TwitterStreamProducerService {
-  implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
 
   //Get your credentials from https://apps.twitter.com and replace the values below
   private val consumerKey = ConfigFactory.load().getString("twitter.config.consumer.key")
@@ -26,9 +28,9 @@ class TwitterStreamProducerServiceImpl extends TwitterStreamProducerService {
   private val accessToken = ConfigFactory.load().getString("twitter.config.access.token.key")
   private val accessTokenSecret = ConfigFactory.load().getString("twitter.config.access.token.secret")
   private val url = "https://stream.twitter.com/1.1/statuses/filter.json"
-
+  implicit val system = ActorSystem()
   implicit val materializer = ActorMaterializer()
-  private val consumer = new DefaultConsumerService(actorSystem.dispatcher)
+  private val consumer = new DefaultConsumerService(global)
 
   def produceStream(trackWord: String): Future[Source[ByteString, Any]] = {
     val source = Uri(url)

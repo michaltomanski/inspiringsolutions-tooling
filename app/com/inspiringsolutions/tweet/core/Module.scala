@@ -1,8 +1,9 @@
 package com.inspiringsolutions.tweet.core
 
+import com.google.inject.AbstractModule
+import com.inspiringsolutions.tweet.AppRoot
 import com.inspiringsolutions.tweet.services.{TwitterStreamProducerService, TwitterStreamProducerServiceImpl}
-import play.api.inject.Module
-import play.api.{Configuration, Environment}
+import play.api.libs.concurrent.AkkaGuiceSupport
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -14,10 +15,11 @@ import play.api.{Configuration, Environment}
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-class ComponentModule extends Module {
+class Module extends AbstractModule with AkkaGuiceSupport {
 
-  def bindings(env: Environment, conf: Configuration) = Seq(
-    bind[TwitterStreamProducerService].to[TwitterStreamProducerServiceImpl]
-  )
+  def configure() = {
+    bind(classOf[TwitterStreamProducerService]).to(classOf[TwitterStreamProducerServiceImpl])
+    bind(classOf[AppRoot]).asEagerSingleton()
+  }
 
 }

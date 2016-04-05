@@ -5,12 +5,12 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Sink
+import com.hunorkovacs.koauth.service.consumer.DefaultConsumerService
 import com.inspiringsolutions.tweet.actors.CompleteStream
 import com.inspiringsolutions.tweet.models.{LimitNotice, Tweet}
 import org.json4s.DefaultFormats
 import org.json4s.native.JsonMethods._
 import org.slf4j.LoggerFactory
-import play.api.Play
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success, Try}
@@ -20,7 +20,7 @@ class TwitterService @Inject() (twitterStreamService: TwitterStreamProducerServi
 
   private val log = LoggerFactory.getLogger(getClass)
 
-  implicit lazy val actorSystem: ActorSystem = Play.unsafeApplication.injector.instanceOf[ActorSystem]
+  implicit val system = ActorSystem()
   implicit val materializer = ActorMaterializer()
 
   implicit val formats = DefaultFormats

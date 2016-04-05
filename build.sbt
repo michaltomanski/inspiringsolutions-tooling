@@ -24,7 +24,8 @@ libraryDependencies ++= {
 
     "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-    "org.scalatest" %% "scalatest" % "3.0.0-M15" % Test
+    "org.scalatest" %% "scalatest" % "3.0.0-M15" % Test,
+    "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0" % Test
   )
 }
 

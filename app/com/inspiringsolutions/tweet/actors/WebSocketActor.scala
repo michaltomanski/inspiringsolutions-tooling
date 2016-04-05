@@ -1,12 +1,11 @@
 package com.inspiringsolutions.tweet.actors
 
 import akka.actor._
-import com.inspiringsolutions.tweet.core.Global
 import com.inspiringsolutions.tweet.models.{SimplifiedTweet, Tweet}
 import play.api.libs.json.Json
 
 object WebSocketActor {
-  def props(out: ActorRef, keyword: Option[String]) = Props(new WebSocketActor(out, Global.webSocketCoordinator, keyword))
+  def props(out: ActorRef, coordinator: ActorRef, keyword: Option[String]) = Props(new WebSocketActor(out, coordinator, keyword))
 }
 
 class WebSocketActor (out: ActorRef, coordinator: ActorRef, keyword: Option[String]) extends Actor {

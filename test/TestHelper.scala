@@ -1,34 +1,22 @@
 import java.util.Random
-import javax.inject.Inject
 
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
 import com.inspiringsolutions.tweet.models.{Entities, Tweet, Users}
 import com.inspiringsolutions.tweet.services.TwitterStreamProducerService
-import play.api.Configuration
-import play.libs.Json
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.duration._
+import play.api.{Application, DefaultApplication}
+import play.api.inject._
+import play.api.inject.guice.{GuiceApplicationBuilder, GuiceInjectorBuilder}
 
 /**
-  * Created by mtomanski on 09.03.16.
+  * Created by mtomanski on 05.04.16.
   */
-class TwitterStreamProducerServiceMock (tweet: Tweet) extends TwitterStreamProducerService {
-
+object TestHelper {
   val random = new Random()
 
-  override def produceStream(trackWord: String): Future[Source[ByteString, Any]] = {
-    val jsonTweet = Json.toJson(tweet).toString() + "\r\n"
-    Future( Source.tick(0.seconds, 500.millisecond, toByteString(jsonTweet)) )
+  def generateAppWithTweets(tweet: Tweet): Application = {
+    new GuiceApplicationBuilder().overrides(bind[TwitterStreamProducerService].toInstance(new TwitterStreamProducerServiceMock(tweet))).build()
   }
 
-  private def toByteString(obj: String): ByteString = {
-    ByteString(obj)
-  }
-
-  private def generateTweet(text: String, name: String)= {
+  def generateTweet(text: String, name: String)= {
     val id = random.nextLong()
     Tweet(
       id = id,
@@ -50,7 +38,5 @@ class TwitterStreamProducerServiceMock (tweet: Tweet) extends TwitterStreamProdu
       entities = Entities()
     )
   }
-
-
 
 }

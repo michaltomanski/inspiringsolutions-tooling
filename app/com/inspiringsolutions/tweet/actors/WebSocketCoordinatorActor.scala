@@ -1,16 +1,20 @@
 package com.inspiringsolutions.tweet.actors
 
 import akka.actor._
+import com.inspiringsolutions.tweet.core.Injection
 import com.inspiringsolutions.tweet.models.Tweet
 import com.inspiringsolutions.tweet.services.TwitterService
 import com.typesafe.config.ConfigFactory
 import org.slf4j.LoggerFactory
-import play.api.Play
+import play.DefaultApplication
+import play.api.Application
+import play.api.inject.guice.GuiceInjectorBuilder
+import play.core.ApplicationProvider
 
 /**
   * Created by mtomanski on 09.03.16.
   */
-class WebSocketCoordinatorActor(twitterService: TwitterService) extends Actor {
+class WebSocketCoordinatorActor (twitterService: TwitterService) extends Actor {
 
   private val log = LoggerFactory.getLogger(getClass)
 
@@ -101,6 +105,7 @@ case class RegisterSocketActor(keyword: Option[String])
 
 case object UnregisterSocketActor
 
-object WebSocketCoordinatorActor {
-  def props = Props(new WebSocketCoordinatorActor(Play.unsafeApplication.injector.instanceOf[TwitterService]))
+object WebSocketCoordinatorActor extends Injection {
+  val twitterService = inject[TwitterService]
+  def props = Props(new WebSocketCoordinatorActor(twitterService))
 }
